@@ -1,6 +1,10 @@
 ################################################################################
 # SETUP AND IMPORT DATA
 
+library(stringr)
+library(beepr)
+library(dplyr)
+
 rm(list=ls())
 setwd("C:/Users/gaoan/Desktop/step8_narrow")
 info = read.csv("games_basic_info.csv")
@@ -35,7 +39,7 @@ full_df$std_word[full_df$std_word == "3D"] = "x3d"
 sub_df = full_df
 sub_df$wrd_counts = NA
 
-library(stringr)
+# library(stringr)
 sub_df$combo_std_remark = str_c(sub_df$std_word, "_", sub_df$remark)            #ACTION_EVENT IS DIFFERENT FROM ACTION_WORLD
 
 all_chgd_wrds = unique(sub_df$combo_std_remark) #2255 words
@@ -57,7 +61,7 @@ for(i in all_chgd_wrds){
   count = 0
 }
 
-library(beepr)
+# library(beepr)
 beep(4)
 
 ################################################################################
@@ -124,7 +128,9 @@ summary(as.numeric(df$xbox360_score))
 
 #CALCULATE AVERAGE SCORES
 #FIRST GET A COUNT OF THE NUMBER OF REVIEWS FOR DENOMINATOR
-library(dplyr)
+
+# library(dplyr)
+
 score_cols = c("ps3_score", "wii_score", "xbox360_score")
 df = df %>%  mutate(missing_scores = rowSums(is.na(.[score_cols])))
 df$number_of_scores = 3 - df$missing_scores
@@ -155,3 +161,5 @@ df$wordtype_mech = 0
 df$wordtype_wm[df$remark == "world" | df$remark == "event"] = 1
 df$wordtype_world[df$remark == "world" | df$remark == "avatar" | df$remark == "name" | df$remark == "perspective"] = 1
 df$wordtype_mech[df$remark == "event"] = 1
+
+write.csv(df, "merged_data_w_dummies.csv")
